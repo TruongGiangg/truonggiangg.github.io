@@ -1,417 +1,205 @@
 <!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#07111f" />
-  <meta name="description" content="Giang Nguyễn - Autodesk Add-in Developer | C# .NET, Revit API, AutoCAD API" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1017">
+  <meta name="description" content="Giang Nguyễn - Autodesk Add-in Developer | C# .NET, Revit API, AutoCAD API">
   <title>Giang Nguyễn | Autodesk Add-in Developer</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
   <style>
-    :root {
-      --bg: #07111f;
-      --panel: rgba(10, 24, 43, 0.72);
-      --panel-soft: rgba(255, 255, 255, 0.045);
-      --border: rgba(255, 255, 255, 0.10);
-      --text: #f8fafc;
-      --muted: #9fb0c7;
-      --cyan: #38bdf8;
-      --blue: #60a5fa;
-      --violet: #8b5cf6;
-      --shadow: 0 28px 90px rgba(0, 0, 0, 0.42);
-    }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: "Be Vietnam Pro", system-ui, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 10% 15%, rgba(56, 189, 248, 0.14), transparent 28%),
-        radial-gradient(circle at 88% 18%, rgba(139, 92, 246, 0.16), transparent 30%),
-        radial-gradient(circle at 52% 92%, rgba(96, 165, 250, 0.10), transparent 28%),
-        linear-gradient(145deg, #050b14 0%, #07111f 50%, #0a1628 100%);
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.16;
-      background-image:
-        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
-      background-size: 42px 42px;
-      mask-image: linear-gradient(to bottom, black, transparent 82%);
-    }
-
-    .orb {
-      position: fixed;
-      border-radius: 999px;
-      filter: blur(65px);
-      opacity: 0.18;
-      pointer-events: none;
-      animation: drift 12s ease-in-out infinite alternate;
-    }
-
-    .orb.one { width: 240px; height: 240px; background: var(--cyan); left: -80px; top: 22%; }
-    .orb.two { width: 290px; height: 290px; background: var(--violet); right: -110px; top: 10%; animation-delay: -4s; }
-
-    @keyframes drift {
-      from { transform: translate3d(0, -12px, 0); }
-      to { transform: translate3d(28px, 24px, 0); }
-    }
-
-    .page {
-      width: min(100% - 28px, 1040px);
-      margin: 0 auto;
-      padding: 42px 0 54px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .shell {
-      display: grid;
-      grid-template-columns: 0.92fr 1.08fr;
-      gap: 20px;
-      align-items: stretch;
-    }
-
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(22px);
-      -webkit-backdrop-filter: blur(22px);
-    }
-
-    .profile {
-      padding: 34px;
-      min-height: 600px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .avatar-wrap {
-      width: 118px;
-      height: 118px;
-      border-radius: 30px;
-      padding: 2px;
-      background: linear-gradient(135deg, var(--cyan), var(--blue), var(--violet));
-      box-shadow: 0 18px 55px rgba(56, 189, 248, 0.18);
-      margin-bottom: 25px;
-    }
-
-    .avatar {
-  width: 100%;
-  height: 100%;
-  border-radius: 28px;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  border: 4px solid #091423;
-}
-
-    .eyebrow {
-      margin: 0 0 10px;
-      color: var(--cyan);
-      font-size: .78rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .16em;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(2.15rem, 6vw, 3.3rem);
-      line-height: 1.04;
-      letter-spacing: -0.055em;
-    }
-
-    .role {
-      margin: 14px 0 0;
-      font-size: 1rem;
-      color: #d9e6f5;
-      font-weight: 600;
-    }
-
-    .intro {
-      margin: 18px 0 0;
-      color: var(--muted);
-      line-height: 1.75;
-      font-size: .94rem;
-      max-width: 44ch;
-    }
-
-    .skills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-      margin-top: 24px;
-    }
-
-    .skill {
-      padding: 9px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(96, 165, 250, 0.20);
-      background: rgba(96, 165, 250, 0.07);
-      color: #dbeafe;
-      font-size: .8rem;
-      font-weight: 600;
-    }
-
-    .socials {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 28px;
-    }
-
-    .social-link {
-      min-width: 44px;
-      min-height: 44px;
-      padding: 0 14px;
-      border-radius: 14px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
-      color: var(--text);
-      text-decoration: none;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.045);
-      transition: transform .22s ease, border-color .22s ease, background .22s ease;
-      font-size: .83rem;
-      font-weight: 600;
-    }
-
-    .social-link:hover {
-      transform: translateY(-3px);
-      border-color: rgba(56, 189, 248, .44);
-      background: rgba(56, 189, 248, .08);
-    }
-
-    .side {
-      padding: 22px;
-      display: grid;
-      gap: 14px;
-    }
-
-    .section-title {
-      margin: 6px 4px 2px;
-      font-size: .76rem;
-      text-transform: uppercase;
-      letter-spacing: .15em;
-      color: #7f96b2;
-      font-weight: 700;
-    }
-
-    .feature {
-      padding: 21px;
-      background: var(--panel-soft);
-      border: 1px solid rgba(255, 255, 255, .075);
-      border-radius: 20px;
-      transition: transform .22s ease, border-color .22s ease, background .22s ease;
-    }
-
-    .feature:hover {
-      transform: translateY(-3px);
-      border-color: rgba(56, 189, 248, .25);
-      background: rgba(255, 255, 255, .06);
-    }
-
-    .feature-head {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 9px;
-    }
-
-    .icon {
-      width: 42px;
-      height: 42px;
-      flex: 0 0 42px;
-      border-radius: 13px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(145deg, rgba(56,189,248,.12), rgba(139,92,246,.10));
-      border: 1px solid rgba(96,165,250,.16);
-      color: var(--cyan);
-    }
-
-    .feature h2 {
-      margin: 0;
-      font-size: 1rem;
-      letter-spacing: -0.015em;
-    }
-
-    .feature p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.65;
-      font-size: .84rem;
-    }
-
-    .status {
-      margin-top: 2px;
-      padding: 17px 20px;
-      border-radius: 18px;
-      border: 1px solid rgba(52, 211, 153, .16);
-      background: rgba(52, 211, 153, .045);
-      color: #c9f7e4;
-      font-size: .82rem;
-      line-height: 1.6;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      display: inline-block;
-      margin-right: 9px;
-      background: #34d399;
-      box-shadow: 0 0 0 5px rgba(52, 211, 153, .08);
-    }
-
-    footer {
-      text-align: center;
-      color: #657b96;
-      font-size: .74rem;
-      margin-top: 22px;
-    }
-
-    @media (max-width: 800px) {
-      .page { padding-top: 18px; }
-      .shell { grid-template-columns: 1fr; }
-      .profile { min-height: auto; padding: 30px 25px; }
-      .side { padding: 16px; }
-    }
-
-    @media (max-width: 480px) {
-      .page { width: min(100% - 18px, 1040px); }
-      .card { border-radius: 22px; }
-      .profile { padding: 27px 21px; }
-      .avatar-wrap { width: 96px; height: 96px; border-radius: 26px; }
-      .avatar { border-radius: 24px; font-size: 1.85rem; }
-      .social-link span { display: none; }
-      .social-link { padding: 0; width: 44px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition: none !important; }
-    }
+    :root { --bg:#0b1017; --panel:#101722; --line:#263346; --line-soft:#1c2736; --text:#eef4fa; --muted:#8fa1b5; --muted-2:#66788e; --accent:#36b5d8; --accent-soft:rgba(54,181,216,.10); --ok:#62c995; --danger:#d96b6b; --radius:10px; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; min-height:100vh; color:var(--text); background:linear-gradient(rgba(11,16,23,.78),rgba(11,16,23,.88)),url("background.png") center center / cover no-repeat fixed; font-family:"IBM Plex Sans",system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+    body::before { content:""; position:fixed; inset:0; pointer-events:none; background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px); background-size:28px 28px; mask-image:linear-gradient(to bottom,rgba(0,0,0,.8),transparent 90%); }
+    a { color:inherit; } button,select,input { font:inherit; }
+    .top-rule { position:fixed; top:0; left:0; right:0; height:2px; background:var(--accent); z-index:100; }
+    .app { width:min(100% - 32px,1500px); margin:0 auto; padding:30px 0 34px; display:grid; grid-template-columns:310px minmax(0,1fr); gap:18px; position:relative; z-index:1; }
+    .panel { border:1px solid var(--line-soft); background:var(--panel); border-radius:var(--radius); }
+    .profile { align-self:start; position:sticky; top:20px; padding:24px; }
+    .profile-kicker,.section-label,.micro-label { font-family:"IBM Plex Mono",monospace; text-transform:uppercase; letter-spacing:.12em; font-size:10px; font-weight:600; color:var(--muted-2); }
+    .avatar { width:92px; height:92px; display:block; object-fit:cover; object-position:center; border-radius:8px; border:1px solid #35465d; background:#080c12; margin:14px 0 20px; }
+    .profile h1 { margin:0; font-size:29px; line-height:1.08; letter-spacing:-.035em; font-weight:700; }
+    .role { margin:7px 0 0; color:#c7d2de; font-size:14px; font-weight:600; }
+    .intro { margin:18px 0 0; color:var(--muted); font-size:13px; line-height:1.7; }
+    .divider { height:1px; background:var(--line-soft); margin:22px 0; }
+    .skill-list { display:flex; flex-wrap:wrap; gap:7px; margin-top:10px; }
+    .skill { border:1px solid var(--line); border-radius:5px; padding:7px 9px; background:#0d141e; color:#c9d6e3; font-family:"IBM Plex Mono",monospace; font-size:10px; font-weight:500; }
+    .socials { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:10px; }
+    .social-link { min-height:38px; display:flex; align-items:center; gap:9px; padding:0 11px; border:1px solid var(--line); border-radius:6px; text-decoration:none; color:#c9d6e3; background:#0d141e; font-size:11px; font-weight:600; transition:border-color .16s ease,background .16s ease,color .16s ease; }
+    .social-link:hover { border-color:#3f5a73; background:#111b27; color:#fff; }
+    .social-link i { width:14px; color:var(--muted); }
+    .profile-status { margin-top:18px; padding-top:15px; border-top:1px solid var(--line-soft); display:flex; align-items:center; gap:8px; color:#93a8bc; font-family:"IBM Plex Mono",monospace; font-size:10px; line-height:1.45; }
+    .status-dot { width:7px; height:7px; flex:0 0 7px; border-radius:50%; background:var(--ok); box-shadow:0 0 0 3px rgba(98,201,149,.08); }
+    .workspace { min-width:0; display:flex; flex-direction:column; gap:12px; }
+    .workspace-head { padding:20px 22px; display:flex; align-items:flex-start; justify-content:space-between; gap:20px; }
+    .workspace-title { display:flex; align-items:center; gap:12px; }
+    .workspace-icon { width:36px; height:36px; flex:0 0 36px; display:grid; place-items:center; border:1px solid #315065; border-radius:6px; background:var(--accent-soft); color:var(--accent); }
+    .workspace h2 { margin:0; font-size:18px; letter-spacing:-.02em; font-weight:600; }
+    .workspace-sub { margin:4px 0 0; color:var(--muted); font-size:12px; }
+    .system-state { display:flex; align-items:center; gap:8px; font-family:"IBM Plex Mono",monospace; font-size:10px; color:#9dafc0; white-space:nowrap; margin-top:5px; }
+    .toolbar { padding:10px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .control-group { min-height:38px; display:flex; align-items:center; gap:8px; padding:0 10px; border:1px solid var(--line-soft); border-radius:6px; background:#0d141e; }
+    .control-group label { font-family:"IBM Plex Mono",monospace; color:var(--muted-2); font-size:9px; letter-spacing:.08em; text-transform:uppercase; }
+    select { border:0; outline:0; color:#dbe5ee; background:transparent; font-size:11px; font-weight:600; cursor:pointer; }
+    select option { background:#101722; color:#eaf0f6; }
+    input[type="range"] { width:94px; accent-color:var(--accent); cursor:pointer; }
+    .range-value { min-width:34px; color:var(--accent); font-family:"IBM Plex Mono",monospace; font-size:10px; text-align:right; }
+    .tool-button { min-height:38px; border:1px solid var(--line-soft); border-radius:6px; padding:0 11px; background:#0d141e; color:#adbdcc; cursor:pointer; font-size:11px; font-weight:600; transition:all .16s ease; }
+    .tool-button:hover,.tool-button.active { color:#fff; border-color:#385468; background:#14202c; }
+    .tool-button.danger:hover { color:#ffdada; border-color:rgba(217,107,107,.45); background:rgba(217,107,107,.08); }
+    .spacer { flex:1 1 auto; }
+    .viewer-panel { overflow:hidden; }
+    .viewer { position:relative; height:620px; min-height:440px; background:linear-gradient(180deg,rgba(255,255,255,.012),rgba(0,0,0,.08)),#0b121c; border-bottom:1px solid var(--line-soft); }
+    #bimCanvas { position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:none; }
+    .viewer-hint { position:absolute; left:14px; bottom:14px; max-width:440px; padding:8px 10px; border:1px solid rgba(38,51,70,.82); border-radius:5px; background:rgba(9,14,21,.82); color:#788ba0; font-family:"IBM Plex Mono",monospace; font-size:9px; line-height:1.55; pointer-events:none; backdrop-filter:blur(8px); }
+    .view-stack { position:absolute; top:13px; right:13px; display:grid; gap:5px; }
+    .view-button { width:42px; height:28px; border:1px solid rgba(38,51,70,.9); border-radius:4px; color:#8497aa; background:rgba(9,14,21,.84); font-family:"IBM Plex Mono",monospace; font-size:8px; cursor:pointer; }
+    .view-button:hover { color:#fff; border-color:#385468; }
+    .hud { display:grid; grid-template-columns:repeat(4,1fr); background:#0d141e; }
+    .metric { min-height:66px; padding:13px 15px; border-right:1px solid var(--line-soft); }
+    .metric:last-child { border-right:0; }
+    .metric-label { color:var(--muted-2); font-family:"IBM Plex Mono",monospace; text-transform:uppercase; letter-spacing:.08em; font-size:9px; }
+    .metric-value { margin-top:5px; color:#e5edf5; font-family:"IBM Plex Mono",monospace; font-size:16px; font-weight:600; }
+    .metric-value span { color:var(--accent); }
+    .notes { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .note { padding:16px 18px; }
+    .note h3 { margin:7px 0 6px; font-size:13px; font-weight:600; }
+    .note p { margin:0; color:var(--muted); line-height:1.6; font-size:11px; }
+    .footer { grid-column:1 / -1; text-align:right; color:#526276; font-family:"IBM Plex Mono",monospace; font-size:9px; padding:2px 2px 0; }
+    @media (max-width:1080px) { .app { grid-template-columns:260px minmax(0,1fr); } .profile { padding:20px; } .viewer { height:560px; } }
+    @media (max-width:820px) { .app { width:min(100% - 18px,1500px); grid-template-columns:1fr; padding-top:12px; } .profile { position:static; } .profile-top { display:grid; grid-template-columns:86px 1fr; column-gap:16px; align-items:center; } .avatar { width:86px; height:86px; margin:10px 0 0; grid-row:1 / span 4; } .profile-kicker,.profile h1,.role { grid-column:2; } .intro { grid-column:1 / -1; } .viewer { height:520px; } .workspace-head { padding:16px; } .system-state { display:none; } .notes { grid-template-columns:1fr; } }
+    @media (max-width:560px) { .workspace-title { align-items:flex-start; } .workspace-sub { line-height:1.5; } .toolbar { align-items:stretch; } .control-group { flex:1 1 calc(50% - 4px); justify-content:space-between; } .tool-button { flex:1 1 auto; } .spacer { display:none; } .viewer { height:440px; } .hud { grid-template-columns:1fr 1fr; } .metric:nth-child(2) { border-right:0; } .metric:nth-child(-n+2) { border-bottom:1px solid var(--line-soft); } .socials { grid-template-columns:1fr 1fr; } .viewer-hint { right:62px; max-width:none; } }
   </style>
 </head>
 <body>
-  <div class="orb one"></div>
-  <div class="orb two"></div>
-
-  <main class="page">
-    <div class="shell">
-      <section class="card profile">
-        <div class="avatar-wrap">
-          <img src="avatar.jpg" alt="Giang Nguyễn" class="avatar">
-        </div>
-
-        <p class="eyebrow">Autodesk · .NET · Automation</p>
+  <div class="top-rule"></div>
+  <main class="app">
+    <aside class="panel profile">
+      <div class="profile-top">
+        <div class="profile-kicker">Profile / Autodesk Development</div>
+        <img class="avatar" src="avatar.jpg" alt="Ảnh đại diện Giang Nguyễn">
         <h1>Giang Nguyễn</h1>
         <p class="role">Autodesk Add-in Developer</p>
-        <p class="intro">
-          Phát triển công cụ và add-in bằng C#/.NET để tự động hóa quy trình làm việc trên Autodesk Revit và AutoCAD, tập trung vào tính ổn định, hiệu quả và trải nghiệm sử dụng.
-        </p>
+        <p class="intro">Phát triển công cụ và add-in bằng C#/.NET cho Autodesk Revit và AutoCAD, tập trung vào tự động hóa, xử lý dữ liệu mô hình và quy trình kỹ thuật ổn định.</p>
+      </div>
+      <div class="divider"></div>
+      <div class="section-label">Core stack</div>
+      <div class="skill-list"><span class="skill">C# / .NET</span><span class="skill">Revit API</span><span class="skill">AutoCAD API</span><span class="skill">OOP</span></div>
+      <div class="divider"></div>
+      <div class="section-label">Contact</div>
+      <nav class="socials" id="socials" aria-label="Liên kết cá nhân"></nav>
+      <div class="profile-status"><span class="status-dot"></span>AVAILABLE FOR TECHNICAL COLLABORATION</div>
+    </aside>
 
-        <div class="skills" aria-label="Kỹ năng">
-          <span class="skill">C# .NET</span>
-          <span class="skill">Revit API</span>
-          <span class="skill">AutoCAD API</span>
+    <section class="workspace">
+      <header class="panel workspace-head">
+        <div class="workspace-title">
+          <div class="workspace-icon"><i class="fa-solid fa-cubes-stacked"></i></div>
+          <div>
+            <div class="micro-label">Interactive structural sandbox</div>
+            <h2>BIM Frame Lab</h2>
+            <p class="workspace-sub">Dựng nhanh hệ cột - dầm - sàn trên lưới mô-đun và kiểm tra mô hình 3D trực tiếp.</p>
+          </div>
         </div>
+        <div class="system-state"><span class="status-dot"></span>THREE.JS / READY</div>
+      </header>
 
-        <nav class="socials" id="socials" aria-label="Liên kết cá nhân"></nav>
+      <div class="panel toolbar">
+        <div class="control-group"><label for="gridSize">Grid</label><select id="gridSize"><option value="3">3 x 3</option><option value="4" selected>4 x 4</option><option value="5">5 x 5</option><option value="6">6 x 6</option><option value="7">7 x 7</option></select></div>
+        <div class="control-group"><label for="gridSpacing">Spacing</label><input id="gridSpacing" type="range" min="1.2" max="3.0" step="0.2" value="1.8"><span class="range-value" id="spacingValue">1.8m</span></div>
+        <div class="control-group"><label for="visualMode">Mode</label><select id="visualMode"><option value="concrete">Concrete</option><option value="rebar">Rebar</option><option value="xray">X-Ray</option></select></div>
+        <div class="spacer"></div>
+        <button class="tool-button" id="rotateBtn" type="button"><i class="fa-solid fa-rotate"></i>&nbsp; Auto rotate</button>
+        <button class="tool-button danger" id="resetBtn" type="button"><i class="fa-regular fa-trash-can"></i>&nbsp; Reset</button>
+      </div>
+
+      <section class="panel viewer-panel">
+        <div class="viewer" id="viewer">
+          <canvas id="bimCanvas"></canvas>
+          <div class="view-stack" aria-label="Góc nhìn mô hình"><button class="view-button" data-view="iso" type="button">ISO</button><button class="view-button" data-view="top" type="button">TOP</button><button class="view-button" data-view="front" type="button">FRONT</button><button class="view-button" data-view="right" type="button">RIGHT</button></div>
+          <div class="viewer-hint">CLICK NODE: add/remove column &nbsp;•&nbsp; DRAG: orbit &nbsp;•&nbsp; WHEEL: zoom<br>Beams and slabs are generated automatically from adjacent active columns.</div>
+        </div>
+        <div class="hud">
+          <div class="metric"><div class="metric-label">Columns</div><div class="metric-value"><span id="columnCount">0</span> ea</div></div>
+          <div class="metric"><div class="metric-label">Beams</div><div class="metric-value"><span id="beamCount">0</span> ea</div></div>
+          <div class="metric"><div class="metric-label">Slabs</div><div class="metric-value"><span id="slabCount">0</span> ea</div></div>
+          <div class="metric"><div class="metric-label">Grid module</div><div class="metric-value"><span id="gridReadout">4x4</span></div></div>
+        </div>
       </section>
 
-      <section class="card side">
-        <p class="section-title">Chuyên môn</p>
+      <div class="notes">
+        <article class="panel note"><div class="micro-label">Rule / 01</div><h3>Parametric connectivity</h3><p>Mỗi cột được đặt theo nút lưới. Dầm chỉ sinh khi hai cột kề nhau cùng tồn tại; ô sàn sinh khi đủ bốn cột biên.</p></article>
+        <article class="panel note"><div class="micro-label">Rule / 02</div><h3>Visualization modes</h3><p>Concrete để xem mô hình hoàn thiện, Rebar để kiểm tra cốt dọc khái niệm và X-Ray để đọc quan hệ hình học bên trong.</p></article>
+      </div>
+    </section>
 
-        <article class="feature">
-          <div class="feature-head">
-            <div class="icon"><i class="fa-solid fa-cubes"></i></div>
-            <h2>Revit Automation</h2>
-          </div>
-          <p>Xây dựng add-in hỗ trợ tự động hóa thao tác, xử lý dữ liệu mô hình và chuẩn hóa workflow trong Revit.</p>
-        </article>
-
-        <article class="feature">
-          <div class="feature-head">
-            <div class="icon"><i class="fa-solid fa-drafting-compass"></i></div>
-            <h2>AutoCAD Tools</h2>
-          </div>
-          <p>Phát triển tiện ích AutoCAD phục vụ thao tác bản vẽ, dữ liệu đối tượng và các quy trình lặp lại.</p>
-        </article>
-
-        <article class="feature">
-          <div class="feature-head">
-            <div class="icon"><i class="fa-solid fa-code"></i></div>
-            <h2>C# / .NET Development</h2>
-          </div>
-          <p>Thiết kế ứng dụng hướng đối tượng, tổ chức code dễ bảo trì và tích hợp API cho hệ sinh thái Autodesk.</p>
-        </article>
-
-        <div class="status"><span class="status-dot"></span>Trang cá nhân tập trung vào Autodesk development và automation.</div>
-      </section>
-    </div>
-
-    <footer>© <span id="year"></span> Giang Nguyễn</footer>
+    <footer class="footer">© <span id="year"></span> GIANG NGUYEN / AUTODESK ADD-IN DEVELOPMENT</footer>
   </main>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <script>
-    // =============================================================
-    // CHỈ CẦN SỬA CÁC LINK BÊN DƯỚI.
-    // Để trống "" nếu chưa muốn hiện nút đó trên trang.
-    // =============================================================
-    const profile = {
-      facebook: "https://www.facebook.com/ntgiang3007/",
-      github: "https://github.com/TruongGiangg",
-      linkedin: "https://www.linkedin.com/in/nguy%E1%BB%85n-giang-3505a4355/",
-      email: "ntgiangg3007@gmail.com"
-    };
-
+    const profile = { facebook:"https://www.facebook.com/ntgiang3007/", github:"https://github.com/TruongGiangg", linkedin:"https://www.linkedin.com/in/nguy%E1%BB%85n-giang-3505a4355/", email:"ntgiangg3007@gmail.com" };
     const socialItems = [
-      { key: "facebook", label: "Facebook", icon: "fa-brands fa-facebook-f", toUrl: v => v },
-      { key: "github", label: "GitHub", icon: "fa-brands fa-github", toUrl: v => v },
-      { key: "linkedin", label: "LinkedIn", icon: "fa-brands fa-linkedin-in", toUrl: v => v },
-      { key: "email", label: "Email", icon: "fa-solid fa-envelope", toUrl: v => `mailto:${v}` }
+      {key:"facebook",label:"Facebook",icon:"fa-brands fa-facebook-f",href:v=>v},
+      {key:"github",label:"GitHub",icon:"fa-brands fa-github",href:v=>v},
+      {key:"linkedin",label:"LinkedIn",icon:"fa-brands fa-linkedin-in",href:v=>v},
+      {key:"email",label:"Email",icon:"fa-solid fa-envelope",href:v=>`mailto:${v}`}
     ];
+    const socials=document.getElementById("socials");
+    socialItems.forEach(item=>{const value=(profile[item.key]||"").trim();if(!value)return;const a=document.createElement("a");a.className="social-link";a.href=item.href(value);a.target=item.key==="email"?"_self":"_blank";a.rel="noopener noreferrer";a.innerHTML=`<i class="${item.icon}"></i><span>${item.label}</span>`;socials.appendChild(a);});
+    document.getElementById("year").textContent=new Date().getFullYear();
 
-    const socials = document.getElementById("socials");
-
-    socialItems.forEach(item => {
-      const value = profile[item.key].trim();
-      if (!value) return;
-
-      const a = document.createElement("a");
-      a.className = "social-link";
-      a.href = item.toUrl(value);
-      a.target = item.key === "email" ? "_self" : "_blank";
-      a.rel = "noopener noreferrer";
-      a.setAttribute("aria-label", item.label);
-      a.innerHTML = `<i class="${item.icon}"></i><span>${item.label}</span>`;
-      socials.appendChild(a);
-    });
-
-    document.getElementById("year").textContent = new Date().getFullYear();
+    (()=>{
+      const viewer=document.getElementById("viewer"),canvas=document.getElementById("bimCanvas"),gridSelect=document.getElementById("gridSize"),spacingRange=document.getElementById("gridSpacing"),spacingValue=document.getElementById("spacingValue"),visualMode=document.getElementById("visualMode"),rotateBtn=document.getElementById("rotateBtn"),resetBtn=document.getElementById("resetBtn"),columnCount=document.getElementById("columnCount"),beamCount=document.getElementById("beamCount"),slabCount=document.getElementById("slabCount"),gridReadout=document.getElementById("gridReadout");
+      let gridSize=Number(gridSelect.value),spacing=Number(spacingRange.value),pointerDown=null,hoveredNode=null,beamTotal=0,slabTotal=0;
+      const columnHeight=2.8,columnSize=.24,beamWidth=.20,beamHeight=.26,slabDepth=.09;
+      const active=new Set(),nodeMeshes=[],nodeMap=new Map(),raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
+      const scene=new THREE.Scene();scene.fog=new THREE.Fog(0x0b121c,12,28);
+      const camera=new THREE.PerspectiveCamera(38,1,.1,100);camera.position.set(7.4,6.4,8.6);
+      const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.setClearColor(0x000000,0);renderer.outputEncoding=THREE.sRGBEncoding;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+      const controls=new THREE.OrbitControls(camera,canvas);controls.enableDamping=true;controls.dampingFactor=.055;controls.minDistance=4;controls.maxDistance=22;controls.maxPolarAngle=Math.PI*.49;controls.autoRotate=false;controls.autoRotateSpeed=.9;controls.target.set(0,1.1,0);
+      scene.add(new THREE.HemisphereLight(0xbfd8ea,0x17202d,1.1));
+      const keyLight=new THREE.DirectionalLight(0xffffff,1.15);keyLight.position.set(6,10,5);keyLight.castShadow=true;keyLight.shadow.mapSize.set(1024,1024);scene.add(keyLight);
+      const rimLight=new THREE.DirectionalLight(0x4bbbd8,.55);rimLight.position.set(-5,4,-6);scene.add(rimLight);
+      const gridGroup=new THREE.Group(),concreteGroup=new THREE.Group(),rebarGroup=new THREE.Group();scene.add(gridGroup,concreteGroup,rebarGroup);
+      const matNodeIdle=new THREE.MeshStandardMaterial({color:0x405165,metalness:.25,roughness:.55}),matNodeActive=new THREE.MeshStandardMaterial({color:0x36b5d8,emissive:0x082c36,metalness:.35,roughness:.35}),matColumn=new THREE.MeshStandardMaterial({color:0x8da0b1,metalness:.12,roughness:.58}),matBeam=new THREE.MeshStandardMaterial({color:0xa7b6c3,metalness:.10,roughness:.55}),matSlab=new THREE.MeshStandardMaterial({color:0x778b9e,metalness:.05,roughness:.65,transparent:true,opacity:.82}),matRebar=new THREE.MeshStandardMaterial({color:0xb87333,metalness:.52,roughness:.36}),matGrid=new THREE.LineBasicMaterial({color:0x324154,transparent:true,opacity:.9});
+      const sharedMaterials=new Set([matNodeIdle,matNodeActive,matColumn,matBeam,matSlab,matRebar,matGrid]);
+      function disposeGroup(group){while(group.children.length){const child=group.children[0];group.remove(child);if(child.geometry)child.geometry.dispose();if(child.material&&!sharedMaterials.has(child.material)){if(Array.isArray(child.material)){child.material.forEach(m=>m.dispose&&m.dispose());}else if(child.material.dispose){child.material.dispose();}}}}
+      const key=(i,j)=>`${i}:${j}`;
+      function gridPosition(i,j){const offset=(gridSize-1)*spacing*.5;return new THREE.Vector3(i*spacing-offset,0,j*spacing-offset);}
+      function buildGrid(){disposeGroup(gridGroup);nodeMeshes.length=0;nodeMap.clear();active.clear();const offset=(gridSize-1)*spacing*.5,positions=[];for(let i=0;i<gridSize;i++){const x=i*spacing-offset;positions.push(x,0,-offset,x,0,offset);}for(let j=0;j<gridSize;j++){const z=j*spacing-offset;positions.push(-offset,0,z,offset,0,z);}const lineGeometry=new THREE.BufferGeometry();lineGeometry.setAttribute("position",new THREE.Float32BufferAttribute(positions,3));gridGroup.add(new THREE.LineSegments(lineGeometry,matGrid));for(let i=0;i<gridSize;i++){for(let j=0;j<gridSize;j++){const p=gridPosition(i,j),node=new THREE.Mesh(new THREE.SphereGeometry(.075,18,12),matNodeIdle);node.position.set(p.x,.035,p.z);node.userData={i,j,node:true};gridGroup.add(node);nodeMeshes.push(node);nodeMap.set(key(i,j),node);}}const plateSize=(gridSize-1)*spacing+1.2,plate=new THREE.Mesh(new THREE.PlaneGeometry(plateSize,plateSize),new THREE.MeshStandardMaterial({color:0x0d151f,roughness:1,metalness:0,transparent:true,opacity:.72}));plate.rotation.x=-Math.PI/2;plate.position.y=-.025;plate.receiveShadow=true;gridGroup.add(plate);rebuildStructure();frameModel();}
+      function addColumnRebar(p){const geo=new THREE.CylinderGeometry(.014,.014,columnHeight-.12,8),d=columnSize*.28;[[-d,-d],[-d,d],[d,-d],[d,d]].forEach(([dx,dz])=>{const rod=new THREE.Mesh(geo.clone(),matRebar);rod.position.set(p.x+dx,columnHeight/2,p.z+dz);rebarGroup.add(rod);});geo.dispose();}
+      function addBeamRebar(a,b,axis){const length=spacing-columnSize*.25,geo=new THREE.CylinderGeometry(.012,.012,length,8),mx=(a.x+b.x)/2,mz=(a.z+b.z)/2,yTop=columnHeight-.06,yBottom=columnHeight-beamHeight+.06,lateral=beamWidth*.26;const makeRod=(y,offset)=>{const rod=new THREE.Mesh(geo.clone(),matRebar);if(axis==="x"){rod.rotation.z=Math.PI/2;rod.position.set(mx,y,mz+offset);}else{rod.rotation.x=Math.PI/2;rod.position.set(mx+offset,y,mz);}rebarGroup.add(rod);};makeRod(yTop,-lateral);makeRod(yTop,lateral);makeRod(yBottom,-lateral);makeRod(yBottom,lateral);geo.dispose();}
+      function rebuildStructure(){disposeGroup(concreteGroup);disposeGroup(rebarGroup);beamTotal=0;slabTotal=0;active.forEach(k=>{const [i,j]=k.split(":").map(Number),p=gridPosition(i,j),column=new THREE.Mesh(new THREE.BoxGeometry(columnSize,columnHeight,columnSize),matColumn);column.position.set(p.x,columnHeight/2,p.z);column.castShadow=true;column.receiveShadow=true;concreteGroup.add(column);addColumnRebar(p);});for(let i=0;i<gridSize;i++){for(let j=0;j<gridSize;j++){if(!active.has(key(i,j)))continue;const a=gridPosition(i,j);if(i+1<gridSize&&active.has(key(i+1,j))){const b=gridPosition(i+1,j),beam=new THREE.Mesh(new THREE.BoxGeometry(spacing,beamHeight,beamWidth),matBeam);beam.position.set((a.x+b.x)/2,columnHeight-beamHeight/2,a.z);beam.castShadow=true;concreteGroup.add(beam);addBeamRebar(a,b,"x");beamTotal++;}if(j+1<gridSize&&active.has(key(i,j+1))){const b=gridPosition(i,j+1),beam=new THREE.Mesh(new THREE.BoxGeometry(beamWidth,beamHeight,spacing),matBeam);beam.position.set(a.x,columnHeight-beamHeight/2,(a.z+b.z)/2);beam.castShadow=true;concreteGroup.add(beam);addBeamRebar(a,b,"z");beamTotal++;}}}for(let i=0;i<gridSize-1;i++){for(let j=0;j<gridSize-1;j++){const hasCell=active.has(key(i,j))&&active.has(key(i+1,j))&&active.has(key(i,j+1))&&active.has(key(i+1,j+1));if(!hasCell)continue;const a=gridPosition(i,j),d=gridPosition(i+1,j+1),slab=new THREE.Mesh(new THREE.BoxGeometry(spacing-.12,slabDepth,spacing-.12),matSlab);slab.position.set((a.x+d.x)/2,columnHeight+slabDepth/2,(a.z+d.z)/2);slab.castShadow=true;slab.receiveShadow=true;concreteGroup.add(slab);slabTotal++;}}updateMode();updateStats();}
+      function updateStats(){columnCount.textContent=active.size;beamCount.textContent=beamTotal;slabCount.textContent=slabTotal;gridReadout.textContent=`${gridSize}x${gridSize}`;}
+      function updateMode(){const mode=visualMode.value;rebarGroup.visible=mode==="rebar"||mode==="xray";[matColumn,matBeam].forEach(mat=>{mat.transparent=mode!=="concrete";mat.opacity=mode==="concrete"?1:mode==="rebar"?.18:.28;mat.depthWrite=mode==="concrete";mat.needsUpdate=true;});matSlab.opacity=mode==="concrete"?.82:mode==="rebar"?.10:.16;matSlab.depthWrite=mode==="concrete";matSlab.needsUpdate=true;}
+      function setNodeState(i,j){const k=key(i,j),node=nodeMap.get(k);if(!node)return;if(active.has(k)){active.delete(k);node.material=matNodeIdle;}else{active.add(k);node.material=matNodeActive;}rebuildStructure();}
+      function updatePointer(event){const rect=canvas.getBoundingClientRect();pointer.x=((event.clientX-rect.left)/rect.width)*2-1;pointer.y=-((event.clientY-rect.top)/rect.height)*2+1;}
+      canvas.addEventListener("pointerdown",event=>{pointerDown={x:event.clientX,y:event.clientY};});
+      canvas.addEventListener("pointerup",event=>{if(!pointerDown)return;const dx=event.clientX-pointerDown.x,dy=event.clientY-pointerDown.y;pointerDown=null;if(Math.hypot(dx,dy)>5)return;updatePointer(event);raycaster.setFromCamera(pointer,camera);const hit=raycaster.intersectObjects(nodeMeshes,false)[0];if(hit&&hit.object.userData.node)setNodeState(hit.object.userData.i,hit.object.userData.j);});
+      canvas.addEventListener("pointermove",event=>{updatePointer(event);raycaster.setFromCamera(pointer,camera);const hit=raycaster.intersectObjects(nodeMeshes,false)[0],next=hit?hit.object:null;if(hoveredNode&&hoveredNode!==next)hoveredNode.scale.setScalar(1);hoveredNode=next;if(hoveredNode)hoveredNode.scale.setScalar(1.5);canvas.style.cursor=hoveredNode?"pointer":"grab";});
+      canvas.addEventListener("pointerleave",()=>{if(hoveredNode)hoveredNode.scale.setScalar(1);hoveredNode=null;canvas.style.cursor="grab";});
+      function frameModel(){const span=Math.max((gridSize-1)*spacing,4),distance=span*1.45+3.2;camera.position.set(distance*.68,distance*.52,distance*.74);controls.target.set(0,columnHeight*.40,0);controls.update();}
+      function setView(type){const span=Math.max((gridSize-1)*spacing,4),d=span*1.35+3.2,target=new THREE.Vector3(0,columnHeight*.40,0);controls.target.copy(target);if(type==="top")camera.position.set(.001,d,.001);if(type==="front")camera.position.set(0,columnHeight*.52,d);if(type==="right")camera.position.set(d,columnHeight*.52,0);if(type==="iso")camera.position.set(d*.68,d*.52,d*.74);camera.lookAt(target);controls.update();}
+      document.querySelectorAll(".view-button").forEach(btn=>btn.addEventListener("click",()=>setView(btn.dataset.view)));
+      gridSelect.addEventListener("change",()=>{gridSize=Number(gridSelect.value);buildGrid();});
+      spacingRange.addEventListener("input",()=>{spacingValue.textContent=`${Number(spacingRange.value).toFixed(1)}m`;});
+      spacingRange.addEventListener("change",()=>{spacing=Number(spacingRange.value);buildGrid();});
+      visualMode.addEventListener("change",updateMode);
+      rotateBtn.addEventListener("click",()=>{controls.autoRotate=!controls.autoRotate;rotateBtn.classList.toggle("active",controls.autoRotate);});
+      resetBtn.addEventListener("click",()=>{active.clear();nodeMeshes.forEach(node=>{node.material=matNodeIdle;node.scale.setScalar(1);});rebuildStructure();});
+      function resize(){const rect=viewer.getBoundingClientRect();if(!rect.width||!rect.height)return;renderer.setSize(rect.width,rect.height,false);camera.aspect=rect.width/rect.height;camera.updateProjectionMatrix();}
+      if("ResizeObserver" in window){const ro=new ResizeObserver(resize);ro.observe(viewer);}window.addEventListener("resize",resize);
+      function animate(){requestAnimationFrame(animate);controls.update();renderer.render(scene,camera);}buildGrid();resize();animate();
+    })();
   </script>
 </body>
 </html>
