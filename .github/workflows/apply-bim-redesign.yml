@@ -1,0 +1,27 @@
+name: Apply BIM UI redesign
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Apply redesigned page
+        run: |
+          cp index.new.html index.html
+          rm index.new.html
+      - name: Commit redesigned page
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+users.noreply.github.com"
+          git add index.html index.new.html
+          git diff --cached --quiet || git commit -m "style: redesign BIM frame lab UI"
+          git push
