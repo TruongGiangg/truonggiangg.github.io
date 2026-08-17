@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b1017">
+  <meta name="theme-color" content="#f4f6f5">
   <meta name="description" content="Giang Nguyễn - Autodesk Add-in Developer | C# .NET, Revit API, AutoCAD API">
   <title>Giang Nguyễn | Autodesk Add-in Developer</title>
 
@@ -76,6 +76,54 @@
     @media (max-width:1080px) { .app { grid-template-columns:260px minmax(0,1fr); } .profile { padding:20px; } .viewer { height:560px; } }
     @media (max-width:820px) { .app { width:min(100% - 18px,1500px); grid-template-columns:1fr; padding-top:12px; } .profile { position:static; } .profile-top { display:grid; grid-template-columns:86px 1fr; column-gap:16px; align-items:center; } .avatar { width:86px; height:86px; margin:10px 0 0; grid-row:1 / span 4; } .profile-kicker,.profile h1,.role { grid-column:2; } .intro { grid-column:1 / -1; } .viewer { height:520px; } .workspace-head { padding:16px; } .system-state { display:none; } .notes { grid-template-columns:1fr; } }
     @media (max-width:560px) { .workspace-title { align-items:flex-start; } .workspace-sub { line-height:1.5; } .toolbar { align-items:stretch; } .control-group { flex:1 1 calc(50% - 4px); justify-content:space-between; } .tool-button { flex:1 1 auto; } .spacer { display:none; } .viewer { height:440px; } .hud { grid-template-columns:1fr 1fr; } .metric:nth-child(2) { border-right:0; } .metric:nth-child(-n+2) { border-bottom:1px solid var(--line-soft); } .socials { grid-template-columns:1fr 1fr; } .viewer-hint { right:62px; max-width:none; } }
+  
+/* Light technical theme */
+:root {
+  --bg:#f4f6f5; --panel:#ffffff; --line:#d9e0e4; --line-soft:#e7ecef;
+  --text:#18212b; --muted:#66717d; --muted-2:#7c8791;
+  --accent:#1687a8; --accent-soft:rgba(22,135,168,.08);
+  --ok:#3d9b70; --danger:#c95d5d; --radius:12px;
+}
+body {
+  color:var(--text);
+  background:linear-gradient(rgba(244,246,245,.92),rgba(244,246,245,.97)),url("background.png") center/cover fixed;
+}
+body::before {
+  background-image:linear-gradient(rgba(24,33,43,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(24,33,43,.035) 1px,transparent 1px);
+  background-size:28px 28px; mask-image:linear-gradient(to bottom,rgba(0,0,0,.55),transparent 88%);
+}
+.panel { background:rgba(255,255,255,.94); border-color:var(--line); box-shadow:0 1px 2px rgba(24,33,43,.025); }
+.profile { box-shadow:0 8px 28px rgba(24,33,43,.035); }
+.avatar { border-color:#d5dde2; background:#eef2f3; }
+.role { color:#3d4a56; }
+.intro { color:#68737d; }
+.divider { background:var(--line-soft); }
+.skill,.social-link,.control-group,.tool-button { border-color:var(--line); background:#f8faf9; color:#40505d; }
+.skill { color:#40505d; }
+.social-link:hover,.tool-button:hover,.tool-button.active { color:#17232d; border-color:#b9cbd3; background:#f1f6f7; }
+.social-link i { color:#77838d; }
+.profile-status { color:#687680; border-top-color:var(--line-soft); }
+.workspace-icon { border-color:#c7dde4; }
+.system-state { color:#65737d; }
+.control-group label { color:#7b858d; }
+select { color:#26333d; }
+select option { background:#fff; color:#18212b; }
+.tool-button { transition:border-color .16s ease,background .16s ease,color .16s ease,transform .16s ease; }
+.tool-button:active { transform:translateY(1px); }
+.tool-button.danger:hover { color:#9b4141; border-color:#e0bcbc; background:#fff7f7; }
+.viewer { background:#eef2f1; border-bottom-color:var(--line); }
+.viewer-hint { border-color:rgba(194,205,210,.92); background:rgba(255,255,255,.90); color:#687680; box-shadow:0 5px 18px rgba(24,33,43,.05); }
+.view-button { border-color:#d0d9de; color:#61717c; background:rgba(255,255,255,.92); }
+.view-button:hover { color:#18212b; border-color:#aebfc7; }
+.hud { background:#f8faf9; }
+.metric { border-right-color:var(--line-soft); }
+.metric-label { color:#7a858e; }
+.metric-value { color:#26333d; }
+.note h3 { color:#26333d; }
+.note p { color:#697680; }
+.footer { color:#849099; }
+@media (max-width:560px) { .metric:nth-child(-n+2) { border-bottom-color:var(--line-soft); } }
+
   </style>
 </head>
 <body>
@@ -162,20 +210,20 @@
       let gridSize=Number(gridSelect.value),spacing=Number(spacingRange.value),pointerDown=null,hoveredNode=null,beamTotal=0,slabTotal=0;
       const columnHeight=2.8,columnSize=.24,beamWidth=.20,beamHeight=.26,slabDepth=.09;
       const active=new Set(),nodeMeshes=[],nodeMap=new Map(),raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
-      const scene=new THREE.Scene();scene.fog=new THREE.Fog(0x0b121c,12,28);
+      const scene=new THREE.Scene();scene.fog=new THREE.Fog(0xe8eeec,12,28);
       const camera=new THREE.PerspectiveCamera(38,1,.1,100);camera.position.set(7.4,6.4,8.6);
       const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.setClearColor(0x000000,0);renderer.outputEncoding=THREE.sRGBEncoding;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
       const controls=new THREE.OrbitControls(camera,canvas);controls.enableDamping=true;controls.dampingFactor=.055;controls.minDistance=4;controls.maxDistance=22;controls.maxPolarAngle=Math.PI*.49;controls.autoRotate=false;controls.autoRotateSpeed=.9;controls.target.set(0,1.1,0);
-      scene.add(new THREE.HemisphereLight(0xbfd8ea,0x17202d,1.1));
+      scene.add(new THREE.HemisphereLight(0xe9f1f0,0x9aa8a9,1.45));
       const keyLight=new THREE.DirectionalLight(0xffffff,1.15);keyLight.position.set(6,10,5);keyLight.castShadow=true;keyLight.shadow.mapSize.set(1024,1024);scene.add(keyLight);
-      const rimLight=new THREE.DirectionalLight(0x4bbbd8,.55);rimLight.position.set(-5,4,-6);scene.add(rimLight);
+      const rimLight=new THREE.DirectionalLight(0x76b8c8,.35);rimLight.position.set(-5,4,-6);scene.add(rimLight);
       const gridGroup=new THREE.Group(),concreteGroup=new THREE.Group(),rebarGroup=new THREE.Group();scene.add(gridGroup,concreteGroup,rebarGroup);
-      const matNodeIdle=new THREE.MeshStandardMaterial({color:0x405165,metalness:.25,roughness:.55}),matNodeActive=new THREE.MeshStandardMaterial({color:0x36b5d8,emissive:0x082c36,metalness:.35,roughness:.35}),matColumn=new THREE.MeshStandardMaterial({color:0x8da0b1,metalness:.12,roughness:.58}),matBeam=new THREE.MeshStandardMaterial({color:0xa7b6c3,metalness:.10,roughness:.55}),matSlab=new THREE.MeshStandardMaterial({color:0x778b9e,metalness:.05,roughness:.65,transparent:true,opacity:.82}),matRebar=new THREE.MeshStandardMaterial({color:0xb87333,metalness:.52,roughness:.36}),matGrid=new THREE.LineBasicMaterial({color:0x324154,transparent:true,opacity:.9});
+      const matNodeIdle=new THREE.MeshStandardMaterial({color:0x83949b,metalness:.25,roughness:.55}),matNodeActive=new THREE.MeshStandardMaterial({color:0x1687a8,emissive:0x082c36,metalness:.35,roughness:.35}),matColumn=new THREE.MeshStandardMaterial({color:0x78878b,metalness:.12,roughness:.58}),matBeam=new THREE.MeshStandardMaterial({color:0x9aa7aa,metalness:.10,roughness:.55}),matSlab=new THREE.MeshStandardMaterial({color:0xb2bcba,metalness:.05,roughness:.65,transparent:true,opacity:.82}),matRebar=new THREE.MeshStandardMaterial({color:0xb87333,metalness:.52,roughness:.36}),matGrid=new THREE.LineBasicMaterial({color:0xaeb9b7,transparent:true,opacity:.9});
       const sharedMaterials=new Set([matNodeIdle,matNodeActive,matColumn,matBeam,matSlab,matRebar,matGrid]);
       function disposeGroup(group){while(group.children.length){const child=group.children[0];group.remove(child);if(child.geometry)child.geometry.dispose();if(child.material&&!sharedMaterials.has(child.material)){if(Array.isArray(child.material)){child.material.forEach(m=>m.dispose&&m.dispose());}else if(child.material.dispose){child.material.dispose();}}}}
       const key=(i,j)=>`${i}:${j}`;
       function gridPosition(i,j){const offset=(gridSize-1)*spacing*.5;return new THREE.Vector3(i*spacing-offset,0,j*spacing-offset);}
-      function buildGrid(){disposeGroup(gridGroup);nodeMeshes.length=0;nodeMap.clear();active.clear();const offset=(gridSize-1)*spacing*.5,positions=[];for(let i=0;i<gridSize;i++){const x=i*spacing-offset;positions.push(x,0,-offset,x,0,offset);}for(let j=0;j<gridSize;j++){const z=j*spacing-offset;positions.push(-offset,0,z,offset,0,z);}const lineGeometry=new THREE.BufferGeometry();lineGeometry.setAttribute("position",new THREE.Float32BufferAttribute(positions,3));gridGroup.add(new THREE.LineSegments(lineGeometry,matGrid));for(let i=0;i<gridSize;i++){for(let j=0;j<gridSize;j++){const p=gridPosition(i,j),node=new THREE.Mesh(new THREE.SphereGeometry(.075,18,12),matNodeIdle);node.position.set(p.x,.035,p.z);node.userData={i,j,node:true};gridGroup.add(node);nodeMeshes.push(node);nodeMap.set(key(i,j),node);}}const plateSize=(gridSize-1)*spacing+1.2,plate=new THREE.Mesh(new THREE.PlaneGeometry(plateSize,plateSize),new THREE.MeshStandardMaterial({color:0x0d151f,roughness:1,metalness:0,transparent:true,opacity:.72}));plate.rotation.x=-Math.PI/2;plate.position.y=-.025;plate.receiveShadow=true;gridGroup.add(plate);rebuildStructure();frameModel();}
+      function buildGrid(){disposeGroup(gridGroup);nodeMeshes.length=0;nodeMap.clear();active.clear();const offset=(gridSize-1)*spacing*.5,positions=[];for(let i=0;i<gridSize;i++){const x=i*spacing-offset;positions.push(x,0,-offset,x,0,offset);}for(let j=0;j<gridSize;j++){const z=j*spacing-offset;positions.push(-offset,0,z,offset,0,z);}const lineGeometry=new THREE.BufferGeometry();lineGeometry.setAttribute("position",new THREE.Float32BufferAttribute(positions,3));gridGroup.add(new THREE.LineSegments(lineGeometry,matGrid));for(let i=0;i<gridSize;i++){for(let j=0;j<gridSize;j++){const p=gridPosition(i,j),node=new THREE.Mesh(new THREE.SphereGeometry(.075,18,12),matNodeIdle);node.position.set(p.x,.035,p.z);node.userData={i,j,node:true};gridGroup.add(node);nodeMeshes.push(node);nodeMap.set(key(i,j),node);}}const plateSize=(gridSize-1)*spacing+1.2,plate=new THREE.Mesh(new THREE.PlaneGeometry(plateSize,plateSize),new THREE.MeshStandardMaterial({color:0xe3e9e7,roughness:1,metalness:0,transparent:true,opacity:.72}));plate.rotation.x=-Math.PI/2;plate.position.y=-.025;plate.receiveShadow=true;gridGroup.add(plate);rebuildStructure();frameModel();}
       function addColumnRebar(p){const geo=new THREE.CylinderGeometry(.014,.014,columnHeight-.12,8),d=columnSize*.28;[[-d,-d],[-d,d],[d,-d],[d,d]].forEach(([dx,dz])=>{const rod=new THREE.Mesh(geo.clone(),matRebar);rod.position.set(p.x+dx,columnHeight/2,p.z+dz);rebarGroup.add(rod);});geo.dispose();}
       function addBeamRebar(a,b,axis){const length=spacing-columnSize*.25,geo=new THREE.CylinderGeometry(.012,.012,length,8),mx=(a.x+b.x)/2,mz=(a.z+b.z)/2,yTop=columnHeight-.06,yBottom=columnHeight-beamHeight+.06,lateral=beamWidth*.26;const makeRod=(y,offset)=>{const rod=new THREE.Mesh(geo.clone(),matRebar);if(axis==="x"){rod.rotation.z=Math.PI/2;rod.position.set(mx,y,mz+offset);}else{rod.rotation.x=Math.PI/2;rod.position.set(mx+offset,y,mz);}rebarGroup.add(rod);};makeRod(yTop,-lateral);makeRod(yTop,lateral);makeRod(yBottom,-lateral);makeRod(yBottom,lateral);geo.dispose();}
       function rebuildStructure(){disposeGroup(concreteGroup);disposeGroup(rebarGroup);beamTotal=0;slabTotal=0;active.forEach(k=>{const [i,j]=k.split(":").map(Number),p=gridPosition(i,j),column=new THREE.Mesh(new THREE.BoxGeometry(columnSize,columnHeight,columnSize),matColumn);column.position.set(p.x,columnHeight/2,p.z);column.castShadow=true;column.receiveShadow=true;concreteGroup.add(column);addColumnRebar(p);});for(let i=0;i<gridSize;i++){for(let j=0;j<gridSize;j++){if(!active.has(key(i,j)))continue;const a=gridPosition(i,j);if(i+1<gridSize&&active.has(key(i+1,j))){const b=gridPosition(i+1,j),beam=new THREE.Mesh(new THREE.BoxGeometry(spacing,beamHeight,beamWidth),matBeam);beam.position.set((a.x+b.x)/2,columnHeight-beamHeight/2,a.z);beam.castShadow=true;concreteGroup.add(beam);addBeamRebar(a,b,"x");beamTotal++;}if(j+1<gridSize&&active.has(key(i,j+1))){const b=gridPosition(i,j+1),beam=new THREE.Mesh(new THREE.BoxGeometry(beamWidth,beamHeight,spacing),matBeam);beam.position.set(a.x,columnHeight-beamHeight/2,(a.z+b.z)/2);beam.castShadow=true;concreteGroup.add(beam);addBeamRebar(a,b,"z");beamTotal++;}}}for(let i=0;i<gridSize-1;i++){for(let j=0;j<gridSize-1;j++){const hasCell=active.has(key(i,j))&&active.has(key(i+1,j))&&active.has(key(i,j+1))&&active.has(key(i+1,j+1));if(!hasCell)continue;const a=gridPosition(i,j),d=gridPosition(i+1,j+1),slab=new THREE.Mesh(new THREE.BoxGeometry(spacing-.12,slabDepth,spacing-.12),matSlab);slab.position.set((a.x+d.x)/2,columnHeight+slabDepth/2,(a.z+d.z)/2);slab.castShadow=true;slab.receiveShadow=true;concreteGroup.add(slab);slabTotal++;}}updateMode();updateStats();}
